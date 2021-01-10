@@ -70,7 +70,7 @@ const txt2woff2 = (text) => {
   })
 }
 
-const svg = async ({ data, skin=0 }) => {
+const svg = async ({ data, skin=0, detail=false }) => {
   if(skin >= Object.keys(skinList).length) skin = 0
 
   const woff2 = await txt2woff2(data.nickname)
@@ -274,12 +274,20 @@ const svg = async ({ data, skin=0 }) => {
                 margin-top: 4px;
               }
 
+              .user-container.less .bottom .section.world-exploration,
+              .user-container.less .chest-list {
+                display: none;
+              }
+              .user-container.less .bottom .section.spiral-abyss {
+                margin-right: auto;
+              }
+
               @font-face {
                 font-family: HYWenHei;
                 src: url('data:font/woff2;base64,${woff2}') format('woff2');
               }
             </style>
-              <div class="user-container">
+              <div class="user-container ${detail ? '' : 'less'}">
                 <div class="top">
                   <div class="user-info">
                     <div class="name-wrap">

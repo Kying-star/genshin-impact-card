@@ -86,13 +86,17 @@ const getRoleInfo = (uid) => {
   })
 }
 
-const userInfo = (uid) => {
-  const key = `__uid__${uid}`
+const userInfo = ({uid, detail=false}) => {
+  const key = `__uid__${uid}_${detail ? 'detail' : 'lite'}`
 
   return new Promise((resolve, reject) => {
     let cachedBody = cardCache.get(key)
     if (cachedBody) {
-      resolve(cachedBody)
+      if(cachedBody.retcode === 10101){
+        reject(cachedBody.message)
+      } else {
+        resolve(cachedBody)
+      }
       return
     } else {
 
@@ -100,43 +104,65 @@ const userInfo = (uid) => {
         .then(roleInfo => {
           const { game_role_id, region } = roleInfo
 
-          http({
-            method: "GET",
-            url: __API.FETCH_ROLE_INDEX,
-            qs: {
-              server: region,
-              role_id: game_role_id
-            },
-            headers: {
-              ...HEADERS,
-              'DS': getDS()
-            }
-          })
-            .then(resp => {
-              resp = JSON.parse(resp)
-              if (resp.retcode === 0) {
-                const { world_explorations } = resp.data
-                const percentage = Math.min((world_explorations.reduce((total, next) => total + next.exploration_percentage, 0) / world_explorations.length / 10000 * 1000).toFixed(1), 100) + '%'
-                const world_exploration = percentage
-
-                const data = {
-                  uid: game_role_id,
-                  world_exploration,
-                  ...resp.data.stats,
-                  ...roleInfo
-                }
-
-                cardCache.set(key, data)
-                resolve(data)
-
-              } else {
-                logger.error('获取角色详情接口报错 %s', resp.message)
+          if(detail){
+            http({
+              method: "GET",
+              url: __API.FETCH_ROLE_INDEX,
+              qs: {
+                server: region,
+                role_id: game_role_id
+              },
+              headers: {
+                ...HEADERS,
+                'DS': getDS()
               }
             })
-            .catch(err => {
-              logger.warn(err)
-              reject(err)
-            })
+              .then(resp => {
+                resp = JSON.parse(resp)
+                if (resp.retcode === 0) {
+                  const { world_explorations } = resp.data
+                  const percentage = Math.min((world_explorations.reduce((total, next) => total + next.exploration_percentage, 0) / world_explorations.length / 10000 * 1000).toFixed(1), 100) + '%'
+                  const world_exploration = percentage
+
+                  const data = {
+                    uid: game_role_id,
+                    world_exploration,
+                    ...resp.data.stats,
+                    ...roleInfo
+                  }
+
+                  cardCache.set(key, data)
+                  resolve(data)
+
+                } else {
+                  cardCache.set(key, resp)
+                  logger.error('获取角色详情接口报错 %s', resp.message)
+                  reject(resp.message)
+                }
+              })
+              .catch(err => {
+                logger.warn(err)
+                reject(err)
+              })
+          } else {
+            const [ active_day_number, avatar_number, achievement_number, spiral_abyss ] = roleInfo.data
+
+            const parsed = {
+              active_day_number: active_day_number.value,
+              avatar_number: avatar_number.value,
+              achievement_number: achievement_number.value,
+              spiral_abyss: spiral_abyss.value
+            }
+            
+            const data = {
+              uid: game_role_id,
+              ...parsed,
+              ...roleInfo
+            }
+
+            cardCache.set(key, data)
+            resolve(data)
+          }
         })
         .catch(err => {
           logger.warn(err)
