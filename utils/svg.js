@@ -19,7 +19,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ
 abcdefghijklmnopqrstuvwxyz
 1234567890 
 "!\`?'.,;:()[]{}<>|/@\\^$-%+=#_&~*
-角色数量成就达成深镜螺旋世界探索活跃天数
+活跃天数角色数量成就达成深镜螺旋世界探索
 `
 
 fs.readdirSync(skinPath).forEach(img => {
