@@ -60,7 +60,7 @@ const getRoleInfo = (uid) => {
 
               if(!roleInfo) {
                 logger.warn('无角色数据, uid %s', uid)
-                reject('no role')
+                reject('无角色数据，请检查输入的米哈游通行证ID是否有误（非游戏内的UID）和是否设置了公开角色信息')
               }
 
               const { game_role_id, nickname, region, region_name } = roleInfo
@@ -72,7 +72,7 @@ const getRoleInfo = (uid) => {
               resolve(roleInfo)
             } else {
               logger.warn('无角色数据, uid %s', uid)
-              reject('no role')
+              reject('无角色数据，请检查输入的米哈游通行证ID是否有误（非游戏内的UID）和是否设置了公开角色信息')
             }
           } else {
             logger.error('获取角色ID接口报错 %s', resp.message)
