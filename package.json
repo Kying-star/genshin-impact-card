@@ -1,0 +1,24 @@
+{
+  "name": "genshin-card",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "express": "^4.17.1",
+    "md5": "^2.3.0",
+    "mime-types": "^2.1.28",
+    "node-cache": "^5.1.2",
+    "pino": "^6.10.0",
+    "request": "^2.88.2"
+  },
+  "devDependencies": {
+    "pino-pretty": "^4.3.0"
+  }
+}
