@@ -1,14 +1,16 @@
 {
-  "name": "genshin-card",
+  "name": "genshin-impact-card",
   "version": "1.0.0",
-  "description": "",
+  "description": "genshin impact user info card",
   "main": "index.js",
   "scripts": {
+    "serve": "node index.js",
+    "dev": "LOG_LEVEL=debug node index.js | ./node_modules/.bin/pino-pretty",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "journey-ad",
+  "license": "MIT",
   "dependencies": {
     "b3b": "0.0.1",
     "compression": "^1.7.4",
