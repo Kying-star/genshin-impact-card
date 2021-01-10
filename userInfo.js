@@ -57,6 +57,12 @@ const getRoleInfo = (uid) => {
           if (resp.retcode === 0) {
             if (resp.data.list && resp.data.list.length > 0) {
               const roleInfo = resp.data.list.find(_ => _.game_id === 2)
+
+              if(!roleInfo) {
+                logger.warn('无角色数据, uid %s', uid)
+                reject('no role')
+              }
+
               const { game_role_id, nickname, region, region_name } = roleInfo
 
               logger.info('首次获取角色信息, uid %s, game_role_id %s, nickname %s, region %s, region_name %s', uid, game_role_id, nickname, region, region_name)
@@ -110,7 +116,7 @@ const userInfo = (uid) => {
               resp = JSON.parse(resp)
               if (resp.retcode === 0) {
                 const { world_explorations } = resp.data
-                const percentage = (world_explorations.reduce((total, next) => total + next.exploration_percentage, 0) / world_explorations.length / 10000 * 1000).toFixed(1) + '%'
+                const percentage = Math.min((world_explorations.reduce((total, next) => total + next.exploration_percentage, 0) / world_explorations.length / 10000 * 1000).toFixed(1), 100) + '%'
                 const world_exploration = percentage
 
                 const data = {

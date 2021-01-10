@@ -10,7 +10,7 @@ const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 const app = express()
 app.use(compression())
 
-app.get('/:skin/:uid\.png', cache(60 * 60), (req, res) => {
+app.get('/:skin/:uid\.png', (req, res) => {
   const { skin, uid } = req.params
   logger.info('收到请求 uid:%s, skin:%s', uid, skin)
 
