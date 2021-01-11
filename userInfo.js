@@ -7,7 +7,7 @@ const util = require('./utils/index')
 const logger = pino({ level: process.env.LOG_LEVEL || 'info' });
 
 const roleIdCache = new NodeCache({ stdTTL: 60 * 60 * 24 * 365 });
-const cardCache = new NodeCache({ stdTTL: 60 * 60 });
+const cardCache = new NodeCache({ stdTTL: 60 * 60 * 24 });
 
 const __API = {
   FETCH_ROLE_ID: 'https://api-takumi.mihoyo.com/game_record/card/wapi/getGameRecordCard',
@@ -60,7 +60,7 @@ const getRoleInfo = (uid) => {
 
               if(!roleInfo) {
                 logger.warn('无角色数据, uid %s', uid)
-                reject('无角色数据，请检查输入的米哈游通行证ID是否有误（非游戏内的UID）和是否设置了公开角色信息')
+                reject('无角色数据，请检查输入的米哈游通行证ID是否有误（非游戏内的UID）和是否设置了公开角色信息，若操作无误则可能是被米哈游屏蔽，请第二天再试')
               }
 
               const { game_role_id, nickname, region, region_name } = roleInfo
@@ -72,7 +72,7 @@ const getRoleInfo = (uid) => {
               resolve(roleInfo)
             } else {
               logger.warn('无角色数据, uid %s', uid)
-              reject('无角色数据，请检查输入的米哈游通行证ID是否有误（非游戏内的UID）和是否设置了公开角色信息')
+              reject('无角色数据，请检查输入的米哈游通行证ID是否有误（非游戏内的UID）和是否设置了公开角色信息，若操作无误则可能是被米哈游屏蔽，请第二天再试')
             }
           } else {
             logger.error('获取角色ID接口报错 %s', resp.message)

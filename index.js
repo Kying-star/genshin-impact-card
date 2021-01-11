@@ -20,7 +20,7 @@ app.get('/:skin/:uid\.png', (req, res) => {
         .then(svgImage => {
           res.set({
             'content-type': 'image/svg+xml',
-            'cache-control': 'max-age=3600'
+            'cache-control': 'max-age=10800'
           })
 
           res.send(svgImage)
@@ -47,7 +47,7 @@ app.get('/detail/:skin/:uid\.png', (req, res) => {
         .then(svgImage => {
           res.set({
             'content-type': 'image/svg+xml',
-            'cache-control': 'max-age=3600'
+            'cache-control': 'max-age=10800'
           })
 
           res.send(svgImage)
